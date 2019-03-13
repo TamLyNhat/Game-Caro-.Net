@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Net.NetworkInformation;
 using System.Threading;
 using System.Windows.Forms;
@@ -32,14 +33,15 @@ namespace GameCaro
 
             socket = new SocketManager();
 
-            ChessBoard.DrawChessBoard();
+            NewGame();
+
         }
 
         private void EndGame()
         {
             tmCoolDown.Stop();
             pnlChessBoard.Enabled = false;
-            MessageBox.Show("Kết thúc");
+            //MessageBox.Show("Kết thúc");
         }
 
         private void ChessBoard_PlayerMarked(object sender, ButtonClickEvent e)
@@ -56,6 +58,7 @@ namespace GameCaro
         private void ChessBoard_EndedGame(object sender, EventArgs e)
         {
             EndGame();
+            socket.Send(new SocketData((int)SocketCommand.END_GAME, "", new Point()));
         }
 
         private void tmCoolDown_Tick(object sender, System.EventArgs e)
@@ -65,6 +68,7 @@ namespace GameCaro
             if (prcbCoolDown.Value >= prcbCoolDown.Maximum)
             {
                 EndGame();
+                socket.Send(new SocketData((int)SocketCommand.TIME_OUT, "", new Point()));
             }
         }
 
@@ -73,7 +77,6 @@ namespace GameCaro
             prcbCoolDown.Value = 0;
             tmCoolDown.Stop();
             ChessBoard.DrawChessBoard();
-
         }
 
         private void Quit()
@@ -83,18 +86,33 @@ namespace GameCaro
 
         private void quitToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //newGameToolStripMenuItem.Enabled = false;
             Quit();
         }
 
         private void newGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
             NewGame();
+            socket.Send(new SocketData((int)SocketCommand.NEW_GAME, "", new Point()));
+
+            pnlChessBoard.Enabled = true;
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (MessageBox.Show("Bạn có chắc muốn thoát", "Thông báo", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != System.Windows.Forms.DialogResult.OK)
+            {
                 e.Cancel = true;
+            }
+            else
+            {
+                try
+                {
+                    socket.Send(new SocketData((int)SocketCommand.QUIT, "", new Point()));
+                }
+                catch { }
+            }
+
         }
 
         private void btnClan_Click(object sender, EventArgs e)
@@ -103,18 +121,17 @@ namespace GameCaro
 
             if (!socket.ConnectServer())
             {
+                btnClan.Enabled = false;
                 socket.isServer = true;
                 pnlChessBoard.Enabled = true;
                 socket.CreateServer();
-
             }
             else
             {
-
                 socket.isServer = false;
                 pnlChessBoard.Enabled = false;
                 Listen();
-
+                btnClan.Enabled = false;
             }
 
         }
@@ -157,6 +174,11 @@ namespace GameCaro
                     MessageBox.Show(data.Message);
                     break;
                 case (int)SocketCommand.NEW_GAME:
+                    this.Invoke((MethodInvoker)(() =>
+                    {
+                        NewGame();
+                        pnlChessBoard.Enabled = false;
+                    }));
                     break;
                 case (int)SocketCommand.SEND_POINT:
                     this.Invoke((MethodInvoker)(() =>
@@ -167,19 +189,29 @@ namespace GameCaro
                         ChessBoard.OtherPlayerMark(data.Point);
                     }));
                     break;
-                case (int)SocketCommand.UNDO:
-                    break;
                 case (int)SocketCommand.END_GAME:
+                    MessageBox.Show("Đã 5 con trên 1 hàng, kết thúc game!!!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    break;
+                case (int)SocketCommand.TIME_OUT:
+                    MessageBox.Show("Hết giờ !!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     break;
                 case (int)SocketCommand.QUIT:
+                    tmCoolDown.Stop();
+                    newGameToolStripMenuItem.Enabled = false;
+                    pnlChessBoard.Enabled = false;
+                    MessageBox.Show("Người chơi đã thoát...", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     break;
                 default:
                     break;
             }
 
+
             Listen();
         }
 
-
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            pnlChessBoard.Enabled = false;
+        }
     }
 }
