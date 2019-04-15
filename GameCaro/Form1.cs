@@ -212,6 +212,9 @@ namespace GameCaro
         private void Form1_Load(object sender, EventArgs e)
         {
             pnlChessBoard.Enabled = false;
+            txtLuat.Text = "Bật 2 ứng dụng cùng lúc, mỗi ứng dụng\nbấm vào nút \"kết nối mạng LAN\". " +
+                "\nBạn có thời gian 10 giây để suy nghĩ \nnước cờ, sau 10s thì game sẽ kết thúc\n " +
+                "Bên nào kết nối trước thì bên đó \nđánh trước";
         }
     }
 }

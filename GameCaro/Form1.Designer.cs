@@ -45,6 +45,7 @@
             this.menuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.txtLuat = new System.Windows.Forms.Label();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pctbAvatar)).BeginInit();
             this.panel3.SuspendLayout();
@@ -90,18 +91,18 @@
             this.panel3.Controls.Add(this.txtPlayerName);
             this.panel3.Location = new System.Drawing.Point(12, 288);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(254, 235);
+            this.panel3.Size = new System.Drawing.Size(254, 217);
             this.panel3.TabIndex = 2;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Elephant", 18.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Times New Roman", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
             this.label1.Location = new System.Drawing.Point(13, 171);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(238, 33);
+            this.label1.Size = new System.Drawing.Size(240, 36);
             this.label1.TabIndex = 5;
-            this.label1.Text = "5 in a line to win ";
+            this.label1.Text = "5 hàng thì thắng";
             // 
             // txtIP
             // 
@@ -187,11 +188,22 @@
             this.quitToolStripMenuItem.Text = "Quit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
             // 
+            // txtLuat
+            // 
+            this.txtLuat.AutoSize = true;
+            this.txtLuat.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+            this.txtLuat.Location = new System.Drawing.Point(11, 508);
+            this.txtLuat.Name = "txtLuat";
+            this.txtLuat.Size = new System.Drawing.Size(45, 19);
+            this.txtLuat.TabIndex = 4;
+            this.txtLuat.Text = "label2";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(867, 638);
+            this.Controls.Add(this.txtLuat);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.pnlChessBoard);
@@ -233,6 +245,7 @@
         private System.Windows.Forms.ToolStripMenuItem menuToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newGameToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
+        private System.Windows.Forms.Label txtLuat;
     }
 }
 
